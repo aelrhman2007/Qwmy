@@ -698,4 +698,127 @@ socialImg.src = 'assets/Soical Yellow.png';
 
     document.getElementById('saveBtn').addEventListener('click', () => {
       const link = document.createElement('a');
-      link.download = 'QWMYnews.png'
+            link.download = 'QWMYnews.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+
+    function toggleFontDropdown() {
+  const dropdown = document.getElementById('fontDropdown');
+  const button = event.currentTarget;
+
+  const rect = button.getBoundingClientRect();
+  dropdown.style.position = 'fixed';
+  dropdown.style.left = `${rect.left}px`;
+  dropdown.style.bottom = `${window.innerHeight - rect.top + 10}px`;
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+    document.querySelectorAll('.custom-font-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        currentFontWeight = e.target.dataset.weight;
+        redrawAll();
+        document.getElementById('fontDropdown').style.display = 'none';
+      });
+    });
+
+function toggleFontSizePopup() {
+  const popup = document.getElementById('fontSizePopup');
+  const button = event.currentTarget;
+
+  const rect = button.getBoundingClientRect();
+  popup.style.position = 'fixed';
+  popup.style.left = `${rect.left}px`;
+  popup.style.bottom = `${window.innerHeight - rect.top + 10}px`;
+  popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+}
+
+const fontSizeSlider = document.getElementById('fontSizeSlider');
+const fontSizeValue = document.getElementById('fontSizeValue');
+
+fontSizeSlider.addEventListener('input', (e) => {
+  currentFontSize = parseInt(e.target.value);
+  fontSizeValue.textContent = currentFontSize;
+  redrawAll();
+});
+
+    document.getElementById('transformBtn').addEventListener('click', () => {
+      const controls = document.getElementById('transformControls');
+      controls.style.display = controls.style.display === 'grid' ? 'none' : 'grid';
+    });
+
+    document.addEventListener('click', (e) => {
+      const controls = document.getElementById('transformControls');
+      if (!e.target.closest('#transformControls') && !e.target.matches('#transformBtn')) {
+        controls.style.display = 'none';
+      }
+    });
+
+    const transformStep = 10;
+    
+    function adjustScale(newScale) {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const deltaScale = newScale / imgScale;
+      imgX = centerX - (centerX - imgX) * deltaScale;
+      imgY = centerY - (centerY - imgY) * deltaScale;
+      imgScale = newScale;
+    }
+
+    document.getElementById('zoomIn').addEventListener('click', () => {
+      adjustScale(imgScale * 1.1);
+      redrawAll();
+    });
+
+    document.getElementById('zoomOut').addEventListener('click', () => {
+      adjustScale(imgScale * 0.9);
+      redrawAll();
+    });
+
+    document.getElementById('moveUp').addEventListener('click', () => {
+      imgY -= transformStep;
+      redrawAll();
+    });
+
+    document.getElementById('moveDown').addEventListener('click', () => {
+      imgY += transformStep;
+      redrawAll();
+    });
+
+    document.getElementById('moveLeft').addEventListener('click', () => {
+      imgX -= transformStep;
+      redrawAll();
+    });
+
+    document.getElementById('moveRight').addEventListener('click', () => {
+      imgX += transformStep;
+      redrawAll();
+    });
+
+    setCanvasSize();
+    logoImg.onload = drawBaseDesign;
+  socialImg.onload = redrawAll;
+    initColorPalettes();
+  
+  
+  document.addEventListener('click', (e) => {
+  const isFontSizeButton = e.target.closest('button')?.innerText?.includes('حجم النص');
+  const isFontWeightButton = e.target.closest('button')?.innerText?.includes('وزن الخط');
+
+  const fontSizePopup = document.getElementById('fontSizePopup');
+  const fontDropdown = document.getElementById('fontDropdown');
+
+  const clickedInsideFontSize = e.target.closest('#fontSizePopup');
+  const clickedInsideFontDropdown = e.target.closest('#fontDropdown');
+
+  if (!clickedInsideFontSize && !isFontSizeButton) {
+    fontSizePopup.style.display = 'none';
+  }
+
+  if (!clickedInsideFontDropdown && !isFontWeightButton) {
+    fontDropdown.style.display = 'none';
+  }
+});
+  </script>
+</body>
+</html>
