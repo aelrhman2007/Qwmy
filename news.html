@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QWMY</title>
+  <title>QWMY | خبر</title>
   <style>
   @font-face { font-family: 'CustomFont'; src: url('fonts/Thin.ttf'); font-weight: 100; }
   @font-face { font-family: 'CustomFont'; src: url('fonts/ExtraLight.ttf'); font-weight: 200; }
@@ -73,6 +73,7 @@
     overflow-x: auto;
     white-space: nowrap;
     max-width: 100vw;
+    z-index: 1000;
   }
   
   .toolbar label {
@@ -135,20 +136,18 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 30px;         /* حجم الزر */
+  width: 30px;
   height: 30px;
-  margin: 2px;         /* تباعد بين الأزرار */
+  margin: 2px;
   border: none;
-  border-radius: 8px; /* حواف دائرية */
+  border-radius: 8px;
   background: #9a7502;
-  color: white;        /* لون الأيقونة */
-  font-size: 12px;     /* حجم الأيقونة */
+  color: white;
+  font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
-
 
   .editor-container {
     max-width: 1200px;
@@ -200,18 +199,145 @@
     padding: 8px;
     min-width: 40px;
   }
+
+  /* التعديلات الجديدة */
+  .custom-input-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .custom-text-input {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+  }
+
+  .custom-text-input input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #555;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 8px;
+  }
+
+  .custom-font-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .custom-font-list {
+    position: absolute;
+    bottom: 100%;
+    background: #333;
+    padding: 10px;
+    border-radius: 10px;
+    display: none;
+    min-width: 150px;
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .custom-font-item {
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .custom-font-item:hover {
+    background: #444;
+  }
+
+  .font-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  input[type="range"] {
+    width: 120px;
+    height: 5px;
+    background: #555;
+    border-radius: 5px;
+    outline: none;
+  }
+
+  #fontSizePopup {
+    padding: 15px;
+    min-width: 200px;
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    background: #333;
+    border-radius: 10px;
+    z-index: 2000;
+  }
+  
+.back-button {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 3000;
+  background: #333;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="top-bar">
-    <button id="undoBtn"><i class="fas fa-undo"></i> تراجع</button>
-    <button id="saveBtn"><i class="fas fa-save"></i> حفظ الصورة</button>
+    <button id="undoBtn"><i class="fas fa-undo"></i> </button>
+    <button id="saveBtn"><i class="fas fa-save"></i>حفظ</button>
   </div>
+  
+<a href="index.html" class="back-button">
+   الرئيسية <i class="fas fa-arrow-left"></i>
+</a>
 
   <div class="editor-container">
     <div class="canvas-wrapper">
       <canvas id="newsCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- صندوق إدخال النص المخصص -->
+  <div class="custom-input-overlay" id="textInputOverlay">
+    <div class="custom-text-input">
+      <input type="text" id="headlineInput" placeholder="أدخل نص الخبر هنا">
+      <div class="color-actions">
+        <div style="text-align: center;">
+  <button onclick="addHeadline()">تأكيد</button>
+
+        <button onclick="document.getElementById('textInputOverlay').style.display = 'none'">إلغاء</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -220,7 +346,7 @@
     <button id="addHeadlineBtn"><i class="fas fa-heading"></i> إضافة نص الخبر</button>
     <button id="transformBtn"><i class="fas fa-arrows-alt"></i> تحريك الصورة</button>
 
-    <div class="color-picker">
+            <div class="color-picker">
       <button class="text-color-trigger"><i class="fas fa-paint-brush"></i> لون النص</button>
       <div class="color-picker-popup text-color-picker">
         <div class="color-palette" id="textColorPalette"></div>
@@ -243,25 +369,36 @@
         </div>
       </div>
     </div>
+    
+    <!-- قائمة الخطوط المخصصة -->
+    <div class="custom-font-dropdown">
+      <button onclick="toggleFontDropdown()"><i class="fas fa-font"></i> وزن الخط</button>
+      <div class="custom-font-list" id="fontDropdown">
+        <div class="custom-font-item" data-weight="100">Thin</div>
+        <div class="custom-font-item" data-weight="200">ExtraLight</div>
+        <div class="custom-font-item" data-weight="300">Light</div>
+        <div class="custom-font-item" data-weight="400">Regular</div>
+        <div class="custom-font-item" data-weight="500">Medium</div>
+        <div class="custom-font-item" data-weight="600">SemiBold</div>
+        <div class="custom-font-item" data-weight="700">Bold</div>
+        <div class="custom-font-item" data-weight="800">ExtraBold</div>
+        <div class="custom-font-item" data-weight="900">Black</div>
+      </div>
+    </div>
 
-    <label>الوزن:
-      <select id="fontWeightSelect">
-        <option value="100">Thin</option>
-        <option value="200">ExtraLight</option>
-        <option value="300">Light</option>
-        <option value="400" selected>Regular</option>
-        <option value="500">Medium</option>
-        <option value="600">SemiBold</option>
-        <option value="700">Bold</option>
-        <option value="800">ExtraBold</option>
-        <option value="900">Black</option>
-      </select>
-    </label>
+    <!-- زر حجم النص مع الصندوق المنبثق -->
+    <div class="custom-font-dropdown">
+      <button onclick="toggleFontSizePopup()"><i class="fas fa-text-height"></i> حجم النص</button>
+      <div class="custom-font-list" id="fontSizePopup">
+<div class="font-slider-container">
+  <input type="range" id="fontSizeSlider" min="10" max="120" value="48">
+  <span id="fontSizeValue">48</span>
+</div>
+      </div>
+    </div>
+    
 
-    <label>الحجم:
-      <input type="number" id="fontSize" value="48" min="10" max="120">
-    </label>
-  </div>
+  </div> <!-- نهاية الـ toolbar -->
 
   <div class="transform-controls" id="transformControls">
     <button class="button1" id="zoomIn"><i class="fas fa-search-plus"></i></button>
@@ -294,7 +431,23 @@
     let imgX = 0;
     let imgY = 0;
 
+  let socialImg = new Image();
+socialImg.src = 'assets/Soical Yellow.png';
     logoImg.src = 'assets/Logo White long shadow.png';
+  
+  
+  window.addEventListener('load', () => {
+  const weights = [100,200,300,400,500,600,700,800,900];
+  weights.forEach(w => {
+    const span = document.createElement('span');
+    span.style.fontFamily = 'CustomFont';
+    span.style.fontWeight = w;
+    span.style.fontSize = '0px';
+    span.innerText = '.';
+    document.body.appendChild(span);
+  });
+});
+  
 
     function setCanvasSize() {
       canvas.width = 1080;
@@ -318,35 +471,49 @@
     }
 
     function redrawAll() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      if (backgroundImage) {
-        const scaledWidth = backgroundImage.width * imgScale;
-        const scaledHeight = backgroundImage.height * imgScale;
-        
-        const drawX = imgX - scaledWidth/2;
-        const drawY = imgY - scaledHeight/2;
-        
-        ctx.drawImage(
-          backgroundImage, 
-          drawX, 
-          drawY, 
-          scaledWidth, 
-          scaledHeight
-        );
-      } else {
-        ctx.fillStyle = '#f8f9fa';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-      
-      textElements.forEach(textInfo => {
-        drawTextElement(textInfo.text);
-      });
-      
-      drawLogo();
-      saveState();
-    }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // رسم الخلفية
+  if (backgroundImage) {
+    const scaledWidth = backgroundImage.width * imgScale;
+    const scaledHeight = backgroundImage.height * imgScale;
+    const drawX = imgX - scaledWidth/2;
+    const drawY = imgY - scaledHeight/2;
+    ctx.drawImage(backgroundImage, drawX, drawY, scaledWidth, scaledHeight);
+  } else {
+    ctx.fillStyle = '#f8f9fa';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
 
+  // رسم نصوص الخبر أولاً
+  textElements.forEach(textInfo => {
+    drawTextElement(textInfo.text);
+  });
+
+  // ثم رسم صورة السوشيال في الأسفل بعد النص
+  drawSocialImage();
+
+  // ثم الشعار
+  drawLogo();
+
+  saveState();
+}
+
+  
+  function drawSocialImage() {
+  if (!socialImg.complete) return;
+
+  const maxWidth = canvas.width * 0.2; // 50% من عرض اللوحة
+  const scale = Math.min(maxWidth / socialImg.width, 1); // لا يكبرها إذا كانت صغيرة
+  const drawWidth = socialImg.width * scale;
+  const drawHeight = socialImg.height * scale;
+
+  const x = (canvas.width - drawWidth) / 2;
+  const y = canvas.height - drawHeight + 55; // مسافة 30px من الأسفل
+
+  ctx.drawImage(socialImg, x, y, drawWidth, drawHeight);
+}
+  
     function drawTextElement(text) {
       const paddingTop = 40;
       const paddingBottom = 100;
@@ -505,12 +672,17 @@
     });
 
     document.getElementById('addHeadlineBtn').addEventListener('click', () => {
-      const text = prompt('أدخل نص العنوان:');
+      document.getElementById('textInputOverlay').style.display = 'flex';
+    });
+
+    function addHeadline() {
+      const text = document.getElementById('headlineInput').value;
       if (text) {
         textElements.push({ text });
+        document.getElementById('textInputOverlay').style.display = 'none';
         redrawAll();
       }
-    });
+    }
 
     document.getElementById('undoBtn').addEventListener('click', () => {
       if (history.length > 1) {
@@ -526,77 +698,4 @@
 
     document.getElementById('saveBtn').addEventListener('click', () => {
       const link = document.createElement('a');
-      link.download = 'news-image.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    });
-
-    document.getElementById('fontSize').addEventListener('input', (e) => {
-      currentFontSize = parseInt(e.target.value);
-      redrawAll();
-    });
-
-    document.getElementById('fontWeightSelect').addEventListener('change', (e) => {
-      currentFontWeight = e.target.value;
-      redrawAll();
-    });
-
-    document.getElementById('transformBtn').addEventListener('click', () => {
-      const controls = document.getElementById('transformControls');
-      controls.style.display = controls.style.display === 'grid' ? 'none' : 'grid';
-    });
-
-    document.addEventListener('click', (e) => {
-      const controls = document.getElementById('transformControls');
-      if (!e.target.closest('#transformControls') && !e.target.matches('#transformBtn')) {
-        controls.style.display = 'none';
-      }
-    });
-
-    const transformStep = 10;
-    
-    function adjustScale(newScale) {
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const deltaScale = newScale / imgScale;
-      imgX = centerX - (centerX - imgX) * deltaScale;
-      imgY = centerY - (centerY - imgY) * deltaScale;
-      imgScale = newScale;
-    }
-
-    document.getElementById('zoomIn').addEventListener('click', () => {
-      adjustScale(imgScale * 1.1);
-      redrawAll();
-    });
-
-    document.getElementById('zoomOut').addEventListener('click', () => {
-      adjustScale(imgScale * 0.9);
-      redrawAll();
-    });
-
-    document.getElementById('moveUp').addEventListener('click', () => {
-      imgY -= transformStep;
-      redrawAll();
-    });
-
-    document.getElementById('moveDown').addEventListener('click', () => {
-      imgY += transformStep;
-      redrawAll();
-    });
-
-    document.getElementById('moveLeft').addEventListener('click', () => {
-      imgX -= transformStep;
-      redrawAll();
-    });
-
-    document.getElementById('moveRight').addEventListener('click', () => {
-      imgX += transformStep;
-      redrawAll();
-    });
-
-    setCanvasSize();
-    logoImg.onload = drawBaseDesign;
-    initColorPalettes();
-  </script>
-</body>
-</html>
+      link.download = 'QWMYnews.png'
