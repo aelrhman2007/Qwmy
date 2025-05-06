@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الهاشتاجات واللينكات</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <style>
+    @font-face { font-family: 'CustomFont'; src: url('fonts/Thin.ttf'); font-weight: 100; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/ExtraLight.ttf'); font-weight: 200; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/Light.ttf'); font-weight: 300; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/Regular.ttf'); font-weight: 400; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/Medium.ttf'); font-weight: 500; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/SemiBold.ttf'); font-weight: 600; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/Bold.ttf'); font-weight: 700; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/ExtraBold.ttf'); font-weight: 800; }
+    @font-face { font-family: 'CustomFont'; src: url('fonts/Black.ttf'); font-weight: 900; }
+    * {
+      font-family: 'CustomFont', sans-serif;
+      box-sizing: border-box;
+    }body {
+  margin: 0;
+  background-color: #121212;
+  color: #fff;
+  direction: rtl;
+  padding: 80px 20px 40px;
+}
+
+.back-button {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 3000;
+  background: #333;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.page-title {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 3000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.content-box {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  position: relative;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.content-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.content-text {
+  background-color: #2a2a2a;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.copy-button,
+.info-button {
+  background-color: #ffc200;
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, opacity 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+
+.copy-button:hover,
+.info-button:hover {
+  background-color: #e0ac00;
+}
+
+.copy-button:active,
+.info-button:active {
+  opacity: 0.6;
+}
+
+.tooltip-box {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background-color: #444;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  white-space: normal;
+  min-width: 200px;
+  width: fit-content;
+  max-width: 200px;
+  overflow-wrap: break-word;
+  text-align: justify;
+  text-justify: inter-word;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 5000;
+}
+
+.tooltip-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-button">
+    الرئيسية <i class="fas fa-arrow-left"></i>
+  </a>
+  <div class="page-title">هاشتاجات ولينكات</div>  <div class="content-box">
+    <div class="content-title">هاشتاج آخر البوست</div>
+    <div class="content-text" id="text1">#قومي | #القومية_المصرية</div>
+    <div class="button-row">
+      <button class="copy-button active" onclick="copyToClipboard('text1'); this.classList.toggle('active');"><i class="fas fa-copy"></i> نسخ</button>
+      <button class="info-button" onclick="toggleTooltip(this); this.classList.toggle('active');">
+        <i class="fas fa-exclamation-circle"></i>
+        <span class="tooltip-box">استـــــــــــــخدم هــذه الهاشتاجات في نهاية بوست قومي</span>
+      </button>
+    </div>
+  </div>  <div class="content-box">
+    <div class="content-title">كومنت اللينكات</div>
+    <div class="content-text" id="text2">- جروبنا
+https://m.facebook.com/groups/qwmycommunity
+      
+- الصفحة البديلة
+https://www.facebook.com/QWMYEG
+      
+- قومي بلس
+https://www.facebook.com/QWMYPLUS
+#قومي | #القومية_المصرية</div> <div class="button-row">
+  <button class="copy-button" onclick="copyToClipboard('text2'); this.classList.toggle('active');"><i class="fas fa-copy"></i> نسخ
+  </button> 
+  <button class="info-button" onclick="toggleTooltip(this); this.classList.toggle('active');"> <i class="fas fa-exclamation-circle"></i>
+    <span class="tooltip-box">هذه اللينكات مجمعة توضع في كومنت بعد نشر البوست</span>
+  </button>
+</div>
+
+  </div>  <div class="toast" id="toast">تم النسخ!</div>  <script>
+    function copyToClipboard(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.innerText).then(() => {
+        showToast();
+      });
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function toggleTooltip(button) {
+      const tooltip = button.querySelector('.tooltip-box');
+      document.querySelectorAll('.tooltip-box').forEach(t => {
+        if (t !== tooltip) t.classList.remove('tooltip-visible');
+      });
+      tooltip.classList.toggle('tooltip-visible');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.info-button')) {
+        document.querySelectorAll('.tooltip-box').forEach(t => t.classList.remove('tooltip-visible'));
+      }
+    });
+  </script></body>
+</html>
