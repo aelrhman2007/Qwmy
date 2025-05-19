@@ -73,20 +73,28 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .dropdown-menu a {
+    .dropdown-menu a,
+    .dropdown-menu button {
       padding: 1rem 1.2rem;
       color: #ffc200;
       text-decoration: none;
       border-bottom: 1px solid #444;
       background-color: #2f2f2f;
       transition: background 0.3s, color 0.3s;
+      text-align: right;
+      cursor: pointer;
+      font-family: 'CustomFont', sans-serif;
+      border: none;
+      outline: none;
     }
 
-    .dropdown-menu a:last-child {
+    .dropdown-menu a:last-child,
+    .dropdown-menu button:last-child {
       border-bottom: none;
     }
 
-    .dropdown-menu a:hover {
+    .dropdown-menu a:hover,
+    .dropdown-menu button:hover {
       background-color: #3a3a3a;
       color: #fff;
     }
@@ -215,6 +223,8 @@
     <div class="dropdown-menu" id="dropdownMenu">
       <a href="links.html">هاشتاجات ولينكات</a>
       <a href="https://qwmyeg.wixsite.com/qwmy/local" target="_blank">الموقع الرسمي</a>
+      <!-- زر الشاشة الكاملة الجديد -->
+      <button onclick="toggleFullscreen()">عرض ملء الشاشة</button>
     </div>
   </header>
 
@@ -299,6 +309,17 @@
         icon.classList.add('fa-bars');
       }
     });
+
+    // دالة تفعيل وضع الشاشة الكاملة
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          alert(`حدث خطأ: ${err.message} (${err.name})`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
   </script>
 </body>
 </html>
